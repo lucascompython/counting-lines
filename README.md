@@ -15,7 +15,7 @@ This projects counts all lines of code(except compiled), files and directories i
 
 ## Features
 
-This program support argument parsing
+This program supports argument parsing
 
     python3 main.py --path ~/Desktop -e .py
 
