@@ -1,4 +1,4 @@
-![plot](https://raw.github.com/niklas-heer/speed-comparison/master/.github/plot_v1.4.png "Speed comparison of programming languages")
+![plot](https://cdn.discordapp.com/attachments/626449728988774401/917097656319357028/unknown.png "Image")
 
 ---
 ![lines](https://img.shields.io/tokei/lines/github/lucascompython/lines-couter)
