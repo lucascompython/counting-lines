@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, prettytable, sys, argparse
+import os, sys, argparse
 
 from prettytable import PrettyTable
 from colorama import Fore
