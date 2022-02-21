@@ -9,7 +9,7 @@ This projects counts all lines of code(except compiled), files and directories i
 
 ## Installation and Execution 
 
-    git clone https://github.com/lucascompython/counting-lines
+    git clone https://github.com/lucascompython/counting-lines.git
     cd countring-lines
     pip3 install -r requirements.txt
     python3 main.py
