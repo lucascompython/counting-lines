@@ -17,8 +17,13 @@ python3 main.py
 ## Features
 
 This program supports argument parsing
+Example
 ```sh
-python3 main.py --path ~/Desktop -e .py
+python3 main.py --path ~/Desktop -e .py -d node_modules -i .ini
+```
+Use to get some help
+```sh
+python3 main.py --help
 ```
 ### Requirements
 
