@@ -20,7 +20,7 @@ This program supports argument parsing.
 
 Example:
 ```sh
-python3 main.py --path ~/Desktop -e .py -d node_modules -i .ini
+python3 main.py --path ~/Desktop -d node_modules -i .ini
 ```
 Use this to get some help:
 ```sh
