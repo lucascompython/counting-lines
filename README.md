@@ -8,7 +8,7 @@
 This projects counts all lines of code(except compiled), files and directories in a folder.
 
 ## Installation and Execution 
-```bash
+```sh
 git clone https://github.com/lucascompython/counting-lines.git
 cd countring-lines
 pip3 install -r requirements.txt
