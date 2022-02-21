@@ -17,9 +17,9 @@ python3 main.py
 ## Features
 
 This program supports argument parsing
-
-    python3 main.py --path ~/Desktop -e .py
-
+```sh
+python3 main.py --path ~/Desktop -e .py
+```
 ### Requirements
 
 - `Python` obviously...
