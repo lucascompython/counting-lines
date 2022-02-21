@@ -135,7 +135,7 @@ def main():
 
     my_table = PrettyTable()
 
-    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentage" + Fore.RESET]
+    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentages" + Fore.RESET]
 
 
 
