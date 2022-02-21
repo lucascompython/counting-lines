@@ -23,4 +23,6 @@ This program supports argument parsing
 ### Requirements
 
 - `Python` obviously...
+- [`Colorama`](https://pypi.org/project/colorama/)
+- [`PrettyTable`](https://pypi.org/project/prettytable/)
 
