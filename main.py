@@ -13,6 +13,7 @@ def parser():
 
     parser.add_argument("-i", '--ign', type=str, help='set extensions to ignore.')
 
+    parser.add_argument("-d", "--dirign", type=str, help="set directories to ignore.")
 
     args = parser.parse_args()
     return args
@@ -46,11 +47,17 @@ def main():
 
     if not EXTENSIONS:
         if not args.ign:
-            IGNORE = input(Fore.YELLOW + "Ignore: " + Fore.RESET).split()
+            IGNORE = input(Fore.YELLOW + "Extensions to Ignore: " + Fore.RESET).split()
         else:
             IGNORE = args.ign.split()
     else:
         IGNORE = None
+
+    if not EXTENSIONS:
+        if not args.dirign:
+            DIR_IGNORE = input(Fore.YELLOW + "Folders to Ignore: " + Fore.RESET).split()
+        else:
+            DIR_IGNORE = args.dirign.split()
 
     if not PATH.endswith("/"):
         PATH + "/"
@@ -61,7 +68,18 @@ def main():
     folders = {}
     total_files, total_dirs, total_lines = 0, 0, 0
     for base, dirs, files in os.walk(PATH):
+
+
+
+
+        #ignore folders that were set to ignore
+        if DIR_IGNORE:
+            if any(ign in base for ign in DIR_IGNORE):
+                continue
+
+
         for directorie in dirs:
+
             if not directorie in folders: folders[directorie] = 1
             else: folders[directorie] += 1
 
