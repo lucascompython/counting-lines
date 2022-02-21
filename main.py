@@ -53,11 +53,10 @@ def main():
     else:
         IGNORE = None
 
-    if not EXTENSIONS:
-        if not args.dirign:
-            DIR_IGNORE = input(Fore.YELLOW + "Folders to Ignore: " + Fore.RESET).split()
-        else:
-            DIR_IGNORE = args.dirign.split()
+    if not args.dirign:
+        DIR_IGNORE = input(Fore.YELLOW + "Folders to Ignore: " + Fore.RESET).split()
+    else:
+        DIR_IGNORE = args.dirign.split()
 
     if not PATH.endswith("/"):
         PATH + "/"
@@ -136,7 +135,7 @@ def main():
 
     my_table = PrettyTable()
 
-    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET]
+    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentage" + Fore.RESET]
 
 
 
@@ -152,12 +151,12 @@ def main():
 
     for language in languages:
         try:
-            my_table.add_row([language, languages[language][0], languages[language][1]])
+            my_table.add_row([language, languages[language][0], languages[language][1], str(round((languages[language][1] / total_lines) * 100, 2)) + "%"])
         except IndexError:
-            my_table.add_row([language, languages[language][0], 0])
+            my_table.add_row([language, languages[language][0], 0, 0])
 
 
-    my_table.add_row([Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, Fore.CYAN + str(total_files) + Fore.RESET, Fore.MAGENTA + str(total_lines) + Fore.RESET])
+    my_table.add_row([Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, Fore.CYAN + str(total_files) + Fore.RESET, Fore.MAGENTA + str(total_lines) + Fore.RESET, Fore.BLUE + "100%" + Fore.RESET])
     print(my_table)
     for count, (ficheiro, valores) in enumerate(all_files.items()):
         print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + Fore.RESET)
