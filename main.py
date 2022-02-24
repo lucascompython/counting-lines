@@ -162,7 +162,7 @@ def main():
         table.add_row([Fore.LIGHTMAGENTA_EX + "Sum:" + Fore.RESET, total_dirs])
         print(table)
 
-    print(languages)
+    
     for language in languages:
         try:
             my_table.add_row([language, languages[language][0], languages[language][1], str(round((languages[language][1] / total_lines) * 100, 2)) + "%", size[language] if len(str(size[language])) < 6 else str(round(size[language] / 100000, 2)) + "(MB)"])
