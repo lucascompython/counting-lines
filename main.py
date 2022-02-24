@@ -65,7 +65,9 @@ def main():
     all_files = {}
     languages = {}
     folders = {}
-    total_files, total_dirs, total_lines = 0, 0, 0
+    size = {}
+    size_per_file = {}
+    total_files, total_dirs, total_lines, total_size = 0, 0, 0, 0
     for base, dirs, files in os.walk(PATH):
 
 
@@ -95,6 +97,15 @@ def main():
 
             if not ext in languages: languages[ext] = [1]
             else: languages[ext][0] += 1
+
+            if not ext in size: size[ext] = os.path.getsize(base + "/" + File)
+            else: size[ext] += os.path.getsize(base + "/" + File)
+
+            total_size += os.path.getsize(base + "/" + File)
+            cena = base + File if base.endswith("/") else base + "/" + File
+            if cena not in size_per_file:
+                size_per_file[cena] = os.path.getsize(cena)
+
             try:
                 for lines in range(len(open((base + "/" + File)).readlines())):
 
@@ -107,6 +118,8 @@ def main():
                     else:
                         languages[ext][1] += 1
 
+
+
                     #Getting lines per file
                     cena = base + File if base.endswith("/") else base + "/" + File
                     if cena not in all_files:
@@ -116,6 +129,7 @@ def main():
 
                     #all lines
                     total_lines += 1
+                    #total_size += os.path.getsize(base + "/" + File)
             except UnicodeDecodeError:
                 continue
 
@@ -135,7 +149,7 @@ def main():
 
     my_table = PrettyTable()
 
-    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentages" + Fore.RESET]
+    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentages" + Fore.RESET, Fore.GREEN + "Size(kB)" + Fore.RESET]
 
 
 
@@ -148,24 +162,32 @@ def main():
         table.add_row([Fore.RED + "Sum:" + Fore.RESET, total_dirs])
         print(table)
 
-
+    print(languages)
     for language in languages:
         try:
-            my_table.add_row([language, languages[language][0], languages[language][1], str(round((languages[language][1] / total_lines) * 100, 2)) + "%"])
+            my_table.add_row([language, languages[language][0], languages[language][1], str(round((languages[language][1] / total_lines) * 100, 2)) + "%", size[language] if len(str(size[language])) < 6 else str(round(size[language] / 100000, 2)) + "(MB)"])
         except IndexError:
-            my_table.add_row([language, languages[language][0], 0, 0])
+            my_table.add_row([language, languages[language][0], 0, 0, size[language] if len(str(size[language])) < 6 else str(round(size[language] / 100000)) + "(MB)"])
 
 
-    my_table.add_row([Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, Fore.CYAN + str(total_files) + Fore.RESET, Fore.MAGENTA + str(total_lines) + Fore.RESET, Fore.BLUE + "100%" + Fore.RESET])
+    my_table.add_row([Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, Fore.CYAN + str(total_files) + Fore.RESET, Fore.MAGENTA + str(total_lines) + Fore.RESET, Fore.BLUE + "100%" + Fore.RESET, Fore.GREEN + str(total_size) + Fore.RESET if len(str(total_size)) < 6 else Fore.GREEN + str(round(total_size / 100000, 2)) + "(MB)" + Fore.RESET])
     print(my_table)
     for count, (ficheiro, valores) in enumerate(all_files.items()):
-        print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + Fore.RESET)
+        length = len(str(round(size_per_file[ficheiro])))
+        length_str = str(round((size_per_file[ficheiro]) / total_size) * 100)
+        if length < 7:
+            length_str += "(MB)"
+
+
+
+        print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + "/" + str(round((valores / total_lines) * 100, 2)) + "%\t" + (str(size_per_file[ficheiro]) + "(kB)" if len(str(size_per_file[ficheiro])) < 6 else str(size_per_file[ficheiro] / 1000) + "(MB)") + Fore.RESET)
         if count == 25:
             print("\033[1mThe project is too big to show all the files...\033[0m")
             break
 
 
-    print(Fore.YELLOW + f"Lines/File{Fore.RESET} -> {round(total_lines/total_files, 3)}")
+    print(Fore.YELLOW + f"Lines/File{Fore.RESET} -> {round(total_lines / total_files, 3)}")
+    print(Fore.YELLOW + "Size/File" + Fore.RESET + "-> " + str(round(total_size / total_files, 3)) + "(kB)" if len(str(round(total_size/ total_files))) < 7 else str(round(total_size / total_files, 3)) + "(MB)")
 
 
 if __name__ == '__main__':
