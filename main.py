@@ -200,7 +200,7 @@ def main():
 
 
         print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + "/" + str(round((valores / total_lines) * 100, 2)) + "%\t" + (str(size_per_file[ficheiro]) + "(kB)" if len(str(size_per_file[ficheiro])) < 6 else str(size_per_file[ficheiro] / 1000) + "(MB)") + Fore.RESET)
-        if count == 25:
+        if count == 25 and not VERBOSE.lower() in ["y", "yes"]:
             print("\033[1mThe project is too big to show all the files...\033[0m")
             break
 
