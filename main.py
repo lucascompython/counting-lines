@@ -159,7 +159,7 @@ def main():
         for pasta, num in folders.items():
             table.add_row([pasta, num])
 
-        table.add_row([Fore.RED + "Sum:" + Fore.RESET, total_dirs])
+        table.add_row([Fore.LIGHTMAGENTA_EX + "Sum:" + Fore.RESET, total_dirs])
         print(table)
 
     print(languages)
