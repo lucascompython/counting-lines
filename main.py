@@ -194,7 +194,7 @@ def main():
     for count, (ficheiro, valores) in enumerate(all_files.items()):
         length = len(str(round(size_per_file[ficheiro])))
         length_str = str(round((size_per_file[ficheiro]) / total_size) * 100)
-        if length < 7:
+        if length < 6:
             length_str += "(MB)"
 
 
