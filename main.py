@@ -15,6 +15,8 @@ def parser():
 
     parser.add_argument("-d", "--dirign", type=str, help="set directories to ignore.")
 
+    parser.add_argument("-v", "--verbose", help="set verbose mode.", action="store_true")
+
     args = parser.parse_args()
     return args
 
@@ -57,6 +59,14 @@ def main():
         DIR_IGNORE = input(Fore.YELLOW + "Folders to Ignore: " + Fore.RESET).split()
     else:
         DIR_IGNORE = args.dirign.split()
+
+
+    if not args.verbose:
+        VERBOSE = input(Fore.YELLOW + "Verbose[Y|N]: " + Fore.RESET)
+    else:
+        VERBOSE = "y"
+
+
 
     if not PATH.endswith("/"):
         PATH + "/"
@@ -107,7 +117,7 @@ def main():
                 size_per_file[cena] = os.path.getsize(cena)
 
             try:
-                for lines in range(len(open((base + "/" + File)).readlines())):
+                for lines in range(len(open(rf"{cena}", "r").readlines())):
 
 
 
@@ -121,7 +131,7 @@ def main():
 
 
                     #Getting lines per file
-                    cena = base + File if base.endswith("/") else base + "/" + File
+                    #cena = base + File if base.endswith("/") else base + "/" + File
                     if cena not in all_files:
                         all_files[cena] = 1
                     else:
@@ -131,8 +141,17 @@ def main():
                     total_lines += 1
                     #total_size += os.path.getsize(base + "/" + File)
             except UnicodeDecodeError:
+                if VERBOSE.lower() in ["y", "yes"]:
+                    print(f"Could not read {cena} because its a binary...")
                 continue
-
+            except PermissionError:
+                if VERBOSE.lower() in ["y", "yes"]:
+                    print(f"Could not read {cena}, run this program with root privelages...")
+                continue
+            except OSError: 
+                if VERBOSE.lower() in ["y", "yes"]:
+                    print(f"Could not read {cena}, Invalid Argument/File...")
+                continue
 
     if EXTENSIONS:
         for extension in EXTENSIONS:
