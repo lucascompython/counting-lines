@@ -66,7 +66,7 @@ def main():
     else:
         VERBOSE = "y"
 
-
+    print("Depending on the size of the selected path this might take a while.")
 
     if not PATH.endswith("/"):
         PATH + "/"
@@ -206,7 +206,7 @@ def main():
 
 
     print(Fore.YELLOW + f"Lines/File{Fore.RESET} -> {round(total_lines / total_files, 3)}")
-    print(Fore.YELLOW + "Size/File" + Fore.RESET + " -> " + str(round(total_size / total_files, 3)) + "(kB)" if len(str(round(total_size/ total_files))) < 6 else str(round(total_size / total_files, 3)) + "(MB)")
+    print(Fore.YELLOW + "Size/File" + Fore.RESET + " -> " + (str(round(total_size / total_files, 3)) + "(kB)" if len(str(round(total_size/ total_files))) < 6 else str(round((total_size / total_files) / 1000, 3)) + "(MB)"))
 
 
 if __name__ == '__main__':
