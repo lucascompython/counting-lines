@@ -7,8 +7,7 @@ from colorama import Fore
 
 def parser():
     parser = argparse.ArgumentParser(description='Count all lines, files and folders in a directory.')
-    parser.add_argument("-p", '--path', metavar='N', type=str,
-                        help='the path to the folder.')
+    parser.add_argument("-p", '--path', metavar='N', type=str, help='the path to the folder.')
     parser.add_argument("-e", '--ext', type=str, help='set extensions to search.')
 
     parser.add_argument("-i", '--ign', type=str, help='set extensions to ignore.')
@@ -105,6 +104,10 @@ def main():
 
             total_files += 1
 
+            if not ext:
+                ext = File
+
+
             if not ext in languages: languages[ext] = [1]
             else: languages[ext][0] += 1
 
@@ -168,7 +171,15 @@ def main():
 
     my_table = PrettyTable()
 
-    my_table.field_names = [Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET, Fore.CYAN + "Files" + Fore.RESET, Fore.MAGENTA + "Lines" + Fore.RESET, Fore.BLUE + "Percentages" + Fore.RESET, Fore.GREEN + "Size(kB)" + Fore.RESET]
+    my_table.field_names = [
+        Fore.LIGHTMAGENTA_EX + "Language" + Fore.RESET,
+        Fore.CYAN + "Files" + Fore.RESET,
+        Fore.LIGHTCYAN_EX + "Files Percentages" + Fore.RESET,
+        Fore.MAGENTA + "Lines" + Fore.RESET,
+        Fore.LIGHTMAGENTA_EX + "Lines Percentages" + Fore.RESET,
+        Fore.GREEN + "Size(kB)" + Fore.RESET,
+        Fore.LIGHTGREEN_EX + "Size Percentages" + Fore.RESET,
+    ]
 
 
 
@@ -178,18 +189,49 @@ def main():
         for pasta, num in folders.items():
             table.add_row([pasta, num])
 
-        table.add_row([Fore.LIGHTMAGENTA_EX + "Sum:" + Fore.RESET, total_dirs])
+        table.add_row([Fore.LIGHTMAGENTA_EX + "Sum:" + Fore.RESET, total_dirs]) #sum of num of files
         print(table)
 
     
     for language in languages:
         try:
-            my_table.add_row([language, languages[language][0], languages[language][1], str(round((languages[language][1] / total_lines) * 100, 2)) + "%", size[language] if len(str(size[language])) < 6 else str(round(size[language] / 100000, 2)) + "(MB)"])
+            my_table.add_row(
+                [
+                    language, #language name
+                    languages[language][0], #num of language files
+                    str(round((languages[language][0] / total_files) * 100, 2)) + "%",
+                    languages[language][1], #num of lines
+                    str(round((languages[language][1] / total_lines) * 100, 2)) + "%", #line percentage
+                    size[language] / 1000 if len(str(size[language])) < 6 else str(round(size[language] * 1e-6, 2)) + "(MB)", #language size
+                    str(round((size[language] / total_size) * 100, 2)) + "%" #size percentage of language
+                ]
+            )
         except IndexError:
-            my_table.add_row([language, languages[language][0], 0, 0, size[language] if len(str(size[language])) < 6 else str(round(size[language] / 100000)) + "(MB)"])
+            my_table.add_row(
+                [
+                    language, #language name
+                    languages[language][0], #num of language files
+                    str(round((languages[language][0] / total_files) * 100, 2)) + "%",
+                    0, #num of lines
+                    0, #line percentage
+                    size[language] / 1000 if len(str(size[language])) < 6 else str(round(size[language] * 1e-6, 2)) + "(MB)", #language size
+                    str(round((size[language] / total_size) * 100, 2)) + "%" #size percentage of language
+                ]
+            )
 
 
-    my_table.add_row([Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, Fore.CYAN + str(total_files) + Fore.RESET, Fore.MAGENTA + str(total_lines) + Fore.RESET, Fore.BLUE + "100%" + Fore.RESET, Fore.GREEN + str(total_size) + Fore.RESET if len(str(total_size)) < 6 else Fore.GREEN + str(round(total_size / 100000, 2)) + "(MB)" + Fore.RESET])
+    my_table.add_row(
+        [
+            Fore.RED + f"SUM:({len(languages)})" + Fore.RESET, #sum of languages
+            Fore.CYAN + str(total_files) + Fore.RESET, #total files
+            Fore.LIGHTCYAN_EX + "100%" + Fore.RESET,
+            Fore.MAGENTA + str(total_lines) + Fore.RESET, # total lines
+            Fore.LIGHTMAGENTA_EX+ "100%" + Fore.RESET, #total line percentage
+            Fore.GREEN + (str(total_size / 1000) + "(kB)" if len(str(total_size)) < 6 else str(round(total_size * 1e-6, 2)) + "(MB)") + Fore.RESET, #total size
+            Fore.LIGHTGREEN_EX + "100%" + Fore.RESET #total size percentage
+        ]
+    )
+
     print(my_table)
     for count, (ficheiro, valores) in enumerate(all_files.items()):
         length = len(str(round(size_per_file[ficheiro])))
@@ -199,14 +241,14 @@ def main():
 
 
 
-        print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + "/" + str(round((valores / total_lines) * 100, 2)) + "%\t" + (str(size_per_file[ficheiro]) + "(kB)" if len(str(size_per_file[ficheiro])) < 6 else str(size_per_file[ficheiro] / 1000) + "(MB)") + Fore.RESET)
+        print(f"{ficheiro}\t\t -> " + Fore.GREEN + str(valores) + "/" + str(round((valores / total_lines) * 100, 2)) + "%\t" + (str(size_per_file[ficheiro] / 1000) + "(kB)" if len(str(size_per_file[ficheiro])) < 6 else str(size_per_file[ficheiro] * 1e-6) + "(MB)") + "/" + str(round((size_per_file[ficheiro] / total_size) * 100, 2)) + "%" + Fore.RESET)
         if count == 25 and not VERBOSE.lower() in ["y", "yes"]:
-            print("\033[1mThe project is too big to show all the files...\033[0m")
+            print("\033[1mThis project is too big to show all the files...\033[0m")
             break
 
 
     print(Fore.YELLOW + f"Lines/File{Fore.RESET} -> {round(total_lines / total_files, 3)}")
-    print(Fore.YELLOW + "Size/File" + Fore.RESET + " -> " + (str(round(total_size / total_files, 3)) + "(kB)" if len(str(round(total_size/ total_files))) < 6 else str(round((total_size / total_files) / 1000, 3)) + "(MB)"))
+    print(Fore.YELLOW + "Size/File" + Fore.RESET + " -> " + (str(round(total_size / total_files, 2) / 1000) + "(kB)" if len(str(round(total_size/ total_files))) < 6 else str(round((total_size / total_files) * 1e-6, 2)) + "(MB)"))
 
 
 if __name__ == '__main__':
