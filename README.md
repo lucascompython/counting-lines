@@ -1,5 +1,5 @@
 # Preview
-![plot](https://cdn.discordapp.com/attachments/795277227423301643/946202568172929094/unknown.png "Display Image")
+![plot](https://cdn.discordapp.com/attachments/795277227423301643/947602124563415090/unknown.png "Display Image")
 
 ---
 ![lines](https://img.shields.io/tokei/lines/github/lucascompython/counting-lines)
