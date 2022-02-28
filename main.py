@@ -36,7 +36,7 @@ def main():
         PATH = args.path
         if not os.path.exists(PATH) and not os.path.isdir(PATH):
             print(Fore.RED + "Please enter a valid path to a directory..." + Fore.RESET)
-
+            exit(1)
     if not args.ext and not args.ign:
         EXTENSIONS = input(Fore.YELLOW + "Extensions: " + Fore.RESET).split()
     else:
