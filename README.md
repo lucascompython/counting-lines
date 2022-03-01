@@ -1,4 +1,4 @@
-# Preview
+# Image Preview
 ![plot](https://cdn.discordapp.com/attachments/795277227423301643/947602124563415090/unknown.png "Display Image")
 
 ---
